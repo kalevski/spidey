@@ -21,7 +21,7 @@ COMING SOON!
 
 ## Contributing
 
-1. Fork (and then `git clone https://github.com/<your-username-here>/spidey-scraper.git`).
+1. Fork (and then `git clone https://github.com/<your-username-here>/spidey.git`).
 2. Make your changes
 3. Commit your changes (`git commit -am "Description of contribution"`).
 4. Push to GitHub (`git push`).
