@@ -1,0 +1,1 @@
+## Directory for mined data

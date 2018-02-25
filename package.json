@@ -1,0 +1,55 @@
+{
+  "name": "spidey",
+  "version": "0.0.1",
+  "description": "An open source, simple & extensible library for extracting the data you need from websites.",
+  "main": "dist/index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "start": "nodemon -w src -w test --exec \"babel-node test\"",
+    "debug": "nodemon -w src -w test --exec \"babel-node --inspect --debug-brk test\"",
+    "build": "babel src -D -d dist",
+    "test": "eslint src"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kalevski/spidey.git"
+  },
+  "keywords": [
+    "scraper",
+    "nodejs",
+    "node",
+    "crawler"
+  ],
+  "author": "Daniel Kalevski",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kalevski/spidey/issues"
+  },
+  "homepage": "https://github.com/kalevski/spidey#readme",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "cheerio": "^1.0.0-rc.2",
+    "decorator-wrapper": "^1.0.0",
+    "enum": "^2.5.0",
+    "md5": "^2.2.1",
+    "readability-js": "^1.0.7",
+    "sequelize": "^4.33.4",
+    "signals": "^1.0.0",
+    "sqlite3": "^3.1.13",
+    "url-parse": "^1.2.0",
+    "winston": "^2.4.0",
+    "winston-transport": "^3.0.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-eslint": "^7.2.3",
+    "babel-plugin-transform-decorators-legacy": "^1.3.4",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "eslint": "^4.18.1",
+    "nodemon": "^1.15.1"
+  }
+}
