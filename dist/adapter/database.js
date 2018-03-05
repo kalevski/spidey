@@ -48,6 +48,9 @@ var Database = function () {
 
         this.logger = _logger2.default.getInstance();
         this.client = null;
+        this.workspacePath = null;
+        this.projectPath = null;
+        this.dataPath = null;
         this.table = {
             Content: null,
             Queue: null
@@ -62,8 +65,20 @@ var Database = function () {
             var dataPath = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : './';
 
 
-            var baseDir = _path2.default.join(process.cwd(), dataPath);
-            if (_fs2.default.existsSync(baseDir)) {
+            this.workspacePath = _path2.default.join(process.cwd(), dataPath);
+            this.projectPath = _path2.default.join(this.workspacePath, name);
+            this.dataPath = _path2.default.join(this.projectPath, 'data');
+
+            if (_fs2.default.existsSync(this.workspacePath)) {
+
+                if (!_fs2.default.existsSync(this.projectPath)) {
+                    _fs2.default.mkdirSync(this.projectPath);
+                }
+
+                if (!_fs2.default.existsSync(this.dataPath)) {
+                    _fs2.default.mkdirSync(this.dataPath);
+                }
+
                 this.client = new _sequelize2.default({
                     logging: function logging(message) {
                         if (message.length > 500) {
@@ -78,11 +93,11 @@ var Database = function () {
                         min: 1,
                         idle: 10000
                     },
-                    storage: _path2.default.join(process.cwd(), dataPath, this.getFilename(name))
+                    storage: _path2.default.join(this.projectPath, 'spidey.sqlite.db')
                 });
                 return this.syncDatabase();
             } else {
-                return Promise.reject(new _databaseError2.default('Dir:' + _path2.default.join(baseDir, '../') + ' doesn\'t exist! I can\'t create database in this path', ''));
+                return Promise.reject(new _databaseError2.default('Dir:' + this.workspacePath + ' doesn\'t exist! I can\'t create project folder in this path', ''));
             }
         }
     }, {
@@ -103,9 +118,34 @@ var Database = function () {
             return this.client.drop();
         }
     }, {
-        key: 'getFilename',
-        value: function getFilename(name) {
-            return name + '-' + new Date().toDateString().split(" ").join("_").toLowerCase() + '.sqlite.db';
+        key: 'saveFile',
+        value: function saveFile(type, name, content) {
+            var _this3 = this;
+
+            return new Promise(function (resolve, reject) {
+                _fs2.default.writeFile(_path2.default.join(_this3.dataPath, type + '-' + name + '.data'), content, function (err) {
+                    if (err) {
+                        reject(err.message);
+                    } else {
+                        resolve();
+                    }
+                });
+            });
+        }
+    }, {
+        key: 'getFile',
+        value: function getFile(type, name) {
+            var _this4 = this;
+
+            return new Promise(function (resolve, reject) {
+                _fs2.default.readFile(_path2.default.join(_this4.dataPath, type + '-' + name + '.data'), 'utf8', function (err, data) {
+                    if (err) {
+                        reject(err.message);
+                    } else {
+                        resolve(data);
+                    }
+                });
+            });
         }
     }]);
 

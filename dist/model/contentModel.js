@@ -21,11 +21,6 @@ exports.default = {
         allowNull: false
     },
 
-    html: {
-        type: _sequelize.STRING,
-        allowNull: false
-    },
-
     hash: {
         type: _sequelize.STRING,
         allowNull: false,

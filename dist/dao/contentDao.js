@@ -24,11 +24,14 @@ var ContentDao = function () {
     _createClass(ContentDao, [{
         key: 'save',
         value: function save(data, url, html, hash) {
+            var _this = this;
+
             return this.database.table.Content.create({
                 data: data,
                 url: url.href,
-                html: html,
                 hash: hash
+            }).then(function () {
+                return _this.database.saveFile('mined-html', hash, html);
             }).catch(function (e) {
                 return false;
             }).then(function () {
