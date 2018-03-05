@@ -71,8 +71,12 @@ class QueueService {
             if (urlObject.origin === null) {
                 urlObject.setOrigin(this.domain.url.origin);
             }
-            if (urlObject.protocol !== 'http:') continue;
-            if (urlObject.origin !== this.domain.url.origin) continue;
+            if (!(urlObject.protocol === 'http:' || urlObject.protocol === 'https:')) {
+                continue;
+            }
+            if (urlObject.origin !== this.domain.url.origin) {
+                continue;
+            }
             urlObject.hash = this.domain.generateHash(urlObject);
             urlObject.after = after;
             if (typeof hashMap[urlObject.hash] === 'undefined') {

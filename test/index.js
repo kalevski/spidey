@@ -8,8 +8,8 @@ scraper.logger.onMessage.add((message, type, formattedMessage) => {
     console.log(formattedMessage);
 });
 
-scraper.scrape('anhoch-com', {
-    target: 'http://www.anhoch.com/',
+scraper.scrape('amc', {
+    target: 'https://www.amc.com.mk/',
     ignoredParams: [],
     duplicateCheck: {
         query: true,
@@ -17,12 +17,20 @@ scraper.scrape('anhoch-com', {
     },
     extractData: function($, url, domain, article, generateHash) {
         let extractedData = {
-            category: $('#breadcrumbs > ul > li:nth-child(2) > a').text(),
-            subCategory: $('#breadcrumbs > ul > li:nth-child(3) > a').text(),
-            title: $('#product > div.box-stripes > div.box-heading > h3').text(),
-            price: $('#product > div.box-stripes > div.box-content > section > div > div.span7 > div > div.price.product-price > div > span.nm').text(),
+            mainCategory: $('body > div.master-wrapper-page > div.master-wrapper-content > div.breadcrumb > ul > li:nth-child(2) > span:nth-child(1) > a > span').text(),
+            subCategory: $('body > div.master-wrapper-page > div.master-wrapper-content > div.breadcrumb > ul > li:nth-child(3) > span:nth-child(1) > a > span').text(),
+            specificCategory:  $('body > div.master-wrapper-page > div.master-wrapper-content > div.breadcrumb > ul > li:nth-child(4) > span:nth-child(1) > a > span').text(),
+            title: $('#product-details-form > div > div.product-essential > div.overview > div.product-name > h1').text(),
+            price: $('#product-details-form > div > div.product-essential > div.overview > div.prices > div > span').text(),
             article: article
         };
+
+        try {
+            extractedData.price = extractedData.price.match(/\d+/g);
+            extractedData.price.pop();
+            extractedData.price = extractedData.price.join('');
+        } catch(e) { }
+
         return {
             data: extractedData,
             hash: generateHash($.html())
@@ -31,7 +39,7 @@ scraper.scrape('anhoch-com', {
     extendQueue: function($, url, domain, extracted) {
         let list = [];
         $('a').each(function() {
-            list.push(this.attribs.href)
+            list.push($(this).attr('href') + '')
         });
         return list;
     }
