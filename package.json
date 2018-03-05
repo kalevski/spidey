@@ -1,6 +1,6 @@
 {
   "name": "spidey",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "An open source, simple & extensible library for extracting the data you need from websites.",
   "main": "dist/index.js",
   "directories": {
