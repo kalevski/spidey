@@ -8,7 +8,7 @@ scraper.logger.onMessage.add((message, type, formattedMessage) => {
     console.log(formattedMessage);
 });
 
-scraper.scrape('anhoch', {
+scraper.scrape('anhoch-com', {
     target: 'http://www.anhoch.com/',
     ignoredParams: [],
     duplicateCheck: {
@@ -25,7 +25,7 @@ scraper.scrape('anhoch', {
         };
         return {
             data: extractedData,
-            hash: generateHash(extractedData)
+            hash: generateHash($.html())
         };
     },
     extendQueue: function($, url, domain, extracted) {

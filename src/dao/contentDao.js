@@ -8,8 +8,9 @@ class ContentDao {
         return this.database.table.Content.create({
             data: data,
             url: url.href,
-            html: html,
             hash: hash
+        }).then(() => {
+            return this.database.saveFile('mined-html', hash, html);
         }).catch((e) => {
             return false;
         }).then(() => {

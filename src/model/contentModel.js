@@ -11,11 +11,6 @@ export default {
         allowNull: false
     },
     
-    html: {
-        type: STRING,
-        allowNull: false
-    },
-    
     hash: {
         type: STRING,
         allowNull: false,

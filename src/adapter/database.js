@@ -15,6 +15,10 @@ class Database {
     logger = Logger.getInstance();
     client = null;
 
+    workspacePath = null;
+    projectPath = null;
+    dataPath = null;
+
     table = {
         Content: null,
         Queue: null
@@ -22,8 +26,20 @@ class Database {
 
     init(name, dataPath = './') {
 
-        let baseDir = path.join(process.cwd(), dataPath);
-        if (fs.existsSync(baseDir)) {
+        this.workspacePath = path.join(process.cwd(), dataPath);
+        this.projectPath = path.join(this.workspacePath, name);
+        this.dataPath = path.join(this.projectPath, 'data');
+
+        if (fs.existsSync(this.workspacePath)) {
+            
+            if (!fs.existsSync(this.projectPath)) {
+                fs.mkdirSync(this.projectPath);
+            }
+            
+            if (!fs.existsSync(this.dataPath)) {
+                fs.mkdirSync(this.dataPath);
+            }
+
             this.client = new Sequelize({
                 logging: (message) => {
                     if (message.length > 500) {
@@ -39,12 +55,12 @@ class Database {
                   min: 1,
                   idle: 10000
                 },
-                storage: path.join(process.cwd(), dataPath, this.getFilename(name))
+                storage: path.join(this.projectPath, 'spidey.sqlite.db')
             });
             return this.syncDatabase();
         } else {
-            return Promise.reject(new DatabaseError('Dir:' + path.join(baseDir, '../')
-                + ' doesn\'t exist! I can\'t create database in this path', ''));
+            return Promise.reject(new DatabaseError('Dir:' + this.workspacePath
+                + ' doesn\'t exist! I can\'t create project folder in this path', ''));
         }
     }
 
@@ -62,8 +78,28 @@ class Database {
         return this.client.drop();
     }
 
-    getFilename(name) {
-        return name + '-' + new Date().toDateString().split(" ").join("_").toLowerCase() + '.sqlite.db';
+    saveFile(type, name, content) {
+        return new Promise((resolve, reject) => {
+            fs.writeFile(path.join(this.dataPath, type + '-' + name + '.data'), content, (err) => {
+                if (err) {
+                    reject(err.message);
+                } else {
+                    resolve();
+                }
+            })
+        });
+    }
+
+    getFile(type, name) {
+        return new Promise((resolve, reject) => {
+            fs.readFile(path.join(this.dataPath, type + '-' + name + '.data'), 'utf8',(err, data) => {
+                if (err) {
+                    reject(err.message);
+                } else {
+                    resolve(data);
+                }
+            });
+        });
     }
 }
 
