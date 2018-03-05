@@ -59,7 +59,7 @@ class Database {
             });
             return this.syncDatabase();
         } else {
-            return Promise.reject(new DatabaseError('Dir:' + this.projectPath
+            return Promise.reject(new DatabaseError('Dir:' + this.workspacePath
                 + ' doesn\'t exist! I can\'t create project folder in this path', ''));
         }
     }
